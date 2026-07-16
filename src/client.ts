@@ -2,6 +2,8 @@
  * App Store Connect API のHTTPクライアント。
  * 通常のJSON:APIレスポンスを返すGET/POSTと、gzip圧縮されたTSVレポートを返すGETの2種のヘルパーを提供する。
  */
+import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { getAccessToken, MissingEnvVarsError } from "./auth.js";
 
@@ -107,6 +109,59 @@ export async function getJson<T = unknown>(path: string): Promise<T> {
 export async function postJson<T = unknown>(path: string, body: unknown): Promise<T> {
   const response = await authorizedFetch(path, "application/json", { method: "POST", body });
   return (await response.json()) as T;
+}
+
+/** JSON:APIボディを送り、レスポンスボディを必要としないPOSTリクエスト。 */
+export async function postRequest(path: string, body: unknown): Promise<void> {
+  await authorizedFetch(path, "application/json", { method: "POST", body });
+}
+
+/**
+ * JSON:APIボディを送るPATCHリクエスト。
+ * 通常は200でJSONボディを返すが、リレーションシップ更新系(例: appStoreVersions/relationships/build)は
+ * 204で空ボディを返すため、その場合はundefinedを返す。
+ */
+export async function patchJson<T = unknown>(path: string, body: unknown): Promise<T | undefined> {
+  const response = await authorizedFetch(path, "application/json", { method: "PATCH", body });
+  if (response.status === 204) {
+    return undefined;
+  }
+  return (await response.json()) as T;
+}
+
+/** ボディなしのDELETEリクエスト。ASCのDELETE系エンドポイントは204で空ボディを返す。 */
+export async function deleteRequest(path: string): Promise<void> {
+  await authorizedFetch(path, "application/json", { method: "DELETE" });
+}
+
+export interface UploadOperation {
+  method: string;
+  url: string;
+  offset: number;
+  length: number;
+  requestHeaders?: Array<{ name: string; value: string }>;
+}
+
+/** ASCが返した予約済みURLへ、指定された範囲とヘッダーでファイルをアップロードする。 */
+export async function uploadAsset(filePath: string, operations: UploadOperation[]): Promise<string> {
+  const file = await readFile(filePath);
+  for (const operation of operations) {
+    const end = operation.offset + operation.length;
+    const body = file.subarray(operation.offset, end);
+    if (body.length !== operation.length) {
+      throw new Error(`アップロード対象の範囲がファイルサイズを超えています: offset=${operation.offset}, length=${operation.length}`);
+    }
+    const response = await fetch(operation.url, {
+      method: operation.method,
+      headers: Object.fromEntries((operation.requestHeaders ?? []).map(({ name, value }) => [name, value])),
+      body,
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
+    if (!response.ok) {
+      throw new Error(`アセットのアップロードに失敗しました (HTTP ${response.status})。`);
+    }
+  }
+  return createHash("md5").update(file).digest("hex");
 }
 
 /** gzipバイナリ(Accept: application/a-gzip)を返すGETリクエスト。展開してTSV文字列を返す。 */

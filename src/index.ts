@@ -19,6 +19,21 @@ import {
   registerListAnalyticsReportsTool,
   registerGetAnalyticsReportDataTool,
 } from "./tools/analytics.js";
+import {
+  registerCreateAppStoreVersionTool,
+  registerCreateVersionLocalizationTool,
+  registerListAppInfoLocalizationsTool,
+  registerListVersionLocalizationsTool,
+  registerSetVersionBuildTool,
+  registerUpdateAppInfoLocalizationTool,
+  registerUpdateVersionLocalizationTool,
+} from "./tools/versions.js";
+import { registerReviewSubmissionTools } from "./tools/review-submission.js";
+import { registerScreenshotTools } from "./tools/screenshots.js";
+import { registerReleaseTools } from "./tools/release.js";
+import { registerTestFlightTools } from "./tools/testflight.js";
+import { registerProductPageTools } from "./tools/product-pages.js";
+import { registerDiagnosticTools } from "./tools/diagnostics.js";
 
 const require = createRequire(import.meta.url);
 const { version } = require("../package.json") as { version: string };
@@ -38,6 +53,19 @@ registerSearchRankingTool(server);
 registerRequestAnalyticsReportsTool(server);
 registerListAnalyticsReportsTool(server);
 registerGetAnalyticsReportDataTool(server);
+registerCreateAppStoreVersionTool(server);
+registerCreateVersionLocalizationTool(server);
+registerListVersionLocalizationsTool(server);
+registerUpdateVersionLocalizationTool(server);
+registerListAppInfoLocalizationsTool(server);
+registerUpdateAppInfoLocalizationTool(server);
+registerSetVersionBuildTool(server);
+registerReviewSubmissionTools(server);
+registerScreenshotTools(server);
+registerReleaseTools(server);
+registerTestFlightTools(server);
+registerProductPageTools(server);
+registerDiagnosticTools(server);
 
 async function main(): Promise<void> {
   const transport = new StdioServerTransport();

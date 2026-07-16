@@ -1,6 +1,6 @@
 # asc-mcp
 
-An unofficial MCP server for the App Store Connect API — list apps, read/reply to customer reviews, list builds and App Store versions, fetch sales reports, and run ASO analysis (keyword ranking, Analytics Reports).
+An unofficial MCP server for the App Store Connect API — automate releases, App Review, metadata, screenshots, TestFlight, product page experiments, diagnostics, reports, reviews, and ASO analysis.
 
 App Store Connect API 用の非公式MCPサーバー。Claude CodeなどのMCP対応エージェントから、自分のアプリの運営・分析データを直接扱えるようにする。
 
@@ -13,6 +13,14 @@ App Store Connect API 用の非公式MCPサーバー。Claude CodeなどのMCP�
 - 売上サマリーレポートの取得（日次・週次・月次・年次）
 - App Storeでのキーワード検索順位チェック（認証不要・単体で使える）
 - Analytics Reportsの取得（インプレッション・プロダクトページ閲覧・流入元別ダウンロードなどのASO分析データ）
+- App Storeバージョン作成、ローカライズ、ビルド紐付け、審査情報更新、審査提出
+- スクリーンショットセット作成、ローカル画像の分割アップロード、一覧・削除
+- 手動・自動・予約リリース、段階的リリース、配信国、アプリ価格の管理
+- TestFlightグループ・テスター・ビルド・What to Test・外部テスト審査の管理
+- カスタムプロダクトページとProduct Page Optimizationの作成・更新
+- クラッシュ・ハングの診断ログ、起動時間などのパフォーマンス指標の取得
+
+課金アイテム、サブスクリプション、Webhookの管理は対象外。
 
 ## クイックスタート
 
@@ -94,8 +102,72 @@ claude mcp add --scope user app-store-connect \
 | `asc_request_analytics_reports` | Analytics Reportsのリクエスト（ONGOINGアクセス）をensureする。既存があれば再利用し、なければ新規作成する |
 | `asc_list_analytics_reports` | `asc_request_analytics_reports` で取得した `requestId` から、利用可能なレポート一覧を取得する |
 | `asc_get_analytics_report_data` | `asc_list_analytics_reports` で取得した `reportId` から、レポートインスタンスのデータ（CSV/TSV）を取得してパースする |
+| `asc_create_app_store_version` | 新しいApp Storeバージョンを作成する |
+| `asc_create_version_localization` | バージョンのローカライズを作成する |
+| `asc_list_version_localizations` | 説明文、キーワード、更新内容などをロケール別に取得する |
+| `asc_update_version_localization` | バージョンのローカライズを部分更新する |
+| `asc_list_app_info_localizations` | アプリ名、サブタイトル、プライバシーポリシーURLをロケール別に取得する |
+| `asc_update_app_info_localization` | アプリ情報のローカライズを部分更新する |
+| `asc_set_version_build` | App Storeバージョンへ審査対象ビルドを紐付ける |
+| `asc_get_review_details` | App Reviewの連絡先、デモアカウント、審査メモを取得する |
+| `asc_create_review_details` | App Review情報を作成する |
+| `asc_update_review_details` | App Review情報を部分更新する |
+| `asc_submit_app_store_version` | Review Submissionを作り、バージョンを追加して審査へ提出する |
+| `asc_submit_product_page_review_item` | Product Page Optimization実験またはカスタムページを審査へ提出する |
+| `asc_create_screenshot_set` | 通常ページ、実験、カスタムページ用のスクリーンショットセットを作る |
+| `asc_list_screenshot_sets` | ローカライズに属するスクリーンショットセットを取得する |
+| `asc_list_screenshots` | セット内のスクリーンショットと処理状態を取得する |
+| `asc_upload_screenshot` | ローカル画像を予約、分割アップロード、コミットする |
+| `asc_delete_screenshot_resource` | スクリーンショットまたはセットを削除する |
+| `asc_update_app_store_version` | リリース方式、公開予定日時、著作権などを更新する |
+| `asc_enable_phased_release` | 7日間の段階的リリースを有効にする |
+| `asc_update_phased_release` | 段階的リリースを開始、一時停止、再開、完了する |
+| `asc_release_app_store_version` | 承認済みの手動リリース待ちバージョンを公開する |
+| `asc_list_app_price_points` | 配信国ごとの価格候補と収益額を取得する |
+| `asc_get_app_price_schedule` | 現在と予約済みの価格、価格ポイントIDを取得する |
+| `asc_set_app_price` | 基準国の価格を即時変更または予約変更する |
+| `asc_get_app_availability` | 国別の配信状況、公開日、予約注文設定を取得する |
+| `asc_list_territory_availabilities` | 全配信国の設定をページネーション付きで取得する |
+| `asc_update_territory_availability` | 1つの国で配信可否や公開日を更新する |
+| `asc_list_beta_groups` | TestFlightグループを取得する |
+| `asc_create_beta_group` | TestFlightグループを作成する |
+| `asc_list_beta_testers` | TestFlightテスターを取得する |
+| `asc_create_beta_tester` | TestFlightテスターを作成・招待する |
+| `asc_add_to_beta_group` | テスターまたはビルドをグループへ追加する |
+| `asc_list_beta_build_localizations` | ロケール別のWhat to Testを取得する |
+| `asc_set_beta_build_localization` | ロケール別のWhat to Testを作成・更新する |
+| `asc_get_build_beta_details` | TestFlightビルドの内部・外部テスト状態を取得する |
+| `asc_update_build_beta_details` | 外部テスト開始時の自動招待を更新する |
+| `asc_submit_beta_app_review` | ビルドを外部TestFlight向け審査へ提出する |
+| `asc_list_product_page_experiments` | Product Page Optimization実験を取得する |
+| `asc_create_product_page_experiment` | Product Page Optimization実験を作成する |
+| `asc_update_product_page_experiment` | 実験の配分、状態、名前を更新する |
+| `asc_create_experiment_treatment` | 実験のTreatmentを作成する |
+| `asc_list_experiment_treatments` | 実験のTreatmentを取得する |
+| `asc_create_experiment_treatment_localization` | Treatmentのローカライズを作成する |
+| `asc_list_custom_product_pages` | カスタムプロダクトページを取得する |
+| `asc_create_custom_product_page` | カスタムプロダクトページを作成する |
+| `asc_update_custom_product_page` | カスタムプロダクトページの名前や表示状態を更新する |
+| `asc_create_custom_product_page_version` | カスタムプロダクトページの編集可能バージョンを作成する |
+| `asc_list_custom_product_page_versions` | カスタムプロダクトページのバージョンを取得する |
+| `asc_update_custom_product_page_version` | カスタムプロダクトページのディープリンクを更新する |
+| `asc_create_custom_product_page_localization` | カスタムページのローカライズを作成する |
+| `asc_get_performance_metrics` | アプリまたはビルドの電力・パフォーマンス指標を取得する |
+| `asc_list_diagnostic_signatures` | ビルドのクラッシュ、ハングなどの診断シグネチャを取得する |
+| `asc_get_diagnostic_logs` | 診断シグネチャの匿名化ログとコールスタックを取得する |
 
 各list系ツールは `limit`（デフォルト20、最大200）と `nextUrl`（前回のレスポンスに含まれる `nextUrl` をそのまま渡すと次ページを取得）でページネーションに対応する。
+
+### リリース提出の基本フロー
+
+1. `asc_create_app_store_version` でバージョンを作る。
+2. `asc_create_version_localization` または `asc_update_version_localization` で更新内容などを入れる。
+3. 必要なら `asc_create_screenshot_set` と `asc_upload_screenshot` で画像を更新する。
+4. `asc_set_version_build` で処理済みビルドを紐付ける。
+5. `asc_create_review_details` または `asc_update_review_details` で審査メモなどを整える。
+6. `asc_submit_app_store_version` で審査へ提出する。
+
+`asc_upload_screenshot` の `filePath` はMCPサーバープロセスから読めるローカルファイルの絶対パスを渡す。Product Page Optimization用のセットでは `localizationType` に `experimentTreatment`、カスタムプロダクトページ用では `customProductPage` を指定する。
 
 ### ASO分析ツールの使い方
 
@@ -108,6 +180,7 @@ claude mcp add --scope user app-store-connect \
 
 - `asc_list_customer_reviews` が返すレビュー本文（`title` / `body`）は、第三者ユーザーが自由に書き込める未検証テキスト。この本文をLLMが読み取る過程で、レビュー文中に埋め込まれた指示（プロンプトインジェクション）に従ってしまう可能性がある。
 - 同じサーバーに公開返信を投稿する `asc_reply_to_review` が同居しているため、悪意あるレビュー本文がエージェントへの指示を含んでいた場合、確認なしに公開返信が投稿される経路が成立しうる。`asc_reply_to_review` はMCPクライアントの自動承認（auto-approve）設定に含めず、実行内容を必ず人間が確認してから承認すること。
+- 審査提出、公開、価格、配信国、スクリーンショット削除を行うツールは本番のApp Store Connectデータを変更する。これらも自動承認へ追加せず、対象アプリ、バージョン、国、価格を実行前に確認すること。
 
 ## 実装メモ
 
