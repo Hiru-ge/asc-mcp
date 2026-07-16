@@ -18,7 +18,7 @@ App Store Connect API 用の非公式MCPサーバー。Claude CodeなどのMCP�
 
 ### 1. App Store Connect APIキーを用意する
 
-[App Store Connect](https://appstoreconnect.apple.com/) の **Users and Access** > **Integrations** > **App Store Connect API** > **Team Keys** でAPIキーを作成し（ロールは **App Manager** 推奨）、`.p8` ファイルをダウンロードする。秘密鍵は一度しかダウンロードできない点に注意。あわせて同ページで **Issuer ID** と **Key ID** を控える。詳細は[APIキー作成の詳細](#app-store-connect-apiキーの作成)を参照。
+[App Store Connect](https://appstoreconnect.apple.com/) の **Users and Access** > **Integrations** > **App Store Connect API** > **Team Keys** でAPIキーを作成し、`.p8` ファイルをダウンロードする。ロールは売上レポート（`asc_get_sales_report`）を使うなら **Admin**、使わないなら **App Manager** で足りる。秘密鍵は一度しかダウンロードできない点に注意。あわせて同ページで **Issuer ID** と **Key ID** を控える。詳細は[APIキー作成の詳細](#app-store-connect-apiキーの作成)を参照。
 
 ### 2. ビルドする
 
@@ -55,7 +55,9 @@ claude mcp add --scope user app-store-connect \
 
 1. [App Store Connect](https://appstoreconnect.apple.com/) にログインする。
 2. **Users and Access** > **Integrations** > **App Store Connect API** > **Team Keys** を開く。
-3. 「キーを生成」から新しいAPIキーを作成する。ロールは **App Manager** を推奨する（アプリ情報・レビュー返信・売上レポートへのアクセスに必要な範囲を満たしつつ、必要以上の権限を持たせない）。
+3. 「キーを生成」から新しいAPIキーを作成する。ロールの選び方は次のとおり。
+   - **App Manager**: アプリ情報・レビュー取得と返信・ビルド・バージョン・Analytics Reportsをカバーする。売上レポートには権限が足りない（HTTP 403になる）
+   - **Admin** または **Sales**: 売上レポート（`asc_get_sales_report`）も使う場合はこちら。SalesロールはSales and Trendsへのアクセスに特化しているが、レビュー返信など他ツールの権限が不足する場合があるため、全ツールを1つのキーで使うなら **Admin** が確実。キーのロールは作成後に変更できない
 4. 生成後に表示される `.p8` ファイルをダウンロードする。**この秘密鍵は一度しかダウンロードできない**。紛失した場合はキーを失効させて再発行する必要がある。ダウンロードしたファイルは安全な場所に保管すること（Gitリポジトリにコミットしない）。
 
 ### Issuer ID / Key ID の場所
