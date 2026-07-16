@@ -1,0 +1,43 @@
+{
+  "name": "asc-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for the App Store Connect API",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "asc-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hiru-ge/asc-mcp.git"
+  },
+  "keywords": [
+    "mcp",
+    "app-store-connect",
+    "aso",
+    "app-store"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "jose": "^6.2.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  }
+}
