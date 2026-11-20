@@ -1,7 +1,7 @@
 {
-  "name": "asc-mcp",
+  "name": "@hiru-ge/asc-mcp",
   "version": "1.0.0",
-  "description": "MCP server for the App Store Connect API",
+  "description": "Unofficial MCP server for the App Store Connect API: releases, App Review, TestFlight, in-app purchases, screenshots, and ASO analysis",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -10,23 +10,38 @@
   "files": [
     "dist",
     "README.md",
+    "README.ja.md",
     "LICENSE"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Hiru-ge/asc-mcp.git"
+    "url": "git+https://github.com/Hiru-ge/asc-mcp.git"
+  },
+  "homepage": "https://github.com/Hiru-ge/asc-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/Hiru-ge/asc-mcp/issues"
   },
   "keywords": [
     "mcp",
+    "mcp-server",
+    "model-context-protocol",
     "app-store-connect",
+    "app-store",
+    "ios",
     "aso",
-    "app-store"
+    "testflight",
+    "claude-code",
+    "claude"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "engines": {
     "node": ">=18"
