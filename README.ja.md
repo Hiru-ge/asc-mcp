@@ -2,7 +2,7 @@
 
 [English](./README.md) | 日本語
 
-[![npm](https://img.shields.io/npm/v/@hiru-ge/asc-mcp)](https://www.npmjs.com/package/@hiru-ge/asc-mcp)
+[![npm](https://img.shields.io/npm/v/@hiruge/asc-mcp)](https://www.npmjs.com/package/@hiruge/asc-mcp)
 [![license](https://img.shields.io/github/license/Hiru-ge/asc-mcp)](./LICENSE)
 
 App Store Connect API 用の非公式MCPサーバー。Claude CodeなどのMCP対応エージェントから、リリース、審査提出、TestFlight、ASO分析、アプリ内課金まで、自分のアプリの運営を会話で進められる。73ツールを備える。
@@ -10,7 +10,7 @@ App Store Connect API 用の非公式MCPサーバー。Claude CodeなどのMCP�
 ```bash
 claude mcp add app-store-connect \
   -e ASC_KEY_ID=xxx -e ASC_ISSUER_ID=xxx -e ASC_PRIVATE_KEY_PATH=/path/to/AuthKey_xxx.p8 \
-  -- npx -y @hiru-ge/asc-mcp
+  -- npx -y @hiruge/asc-mcp
 ```
 
 あとはエージェントにそのまま頼むだけ
@@ -47,7 +47,7 @@ claude mcp add app-store-connect \
   "mcpServers": {
     "app-store-connect": {
       "command": "npx",
-      "args": ["-y", "@hiru-ge/asc-mcp"],
+      "args": ["-y", "@hiruge/asc-mcp"],
       "env": {
         "ASC_KEY_ID": "xxx",
         "ASC_ISSUER_ID": "xxx",

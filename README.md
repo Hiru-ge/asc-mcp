@@ -2,7 +2,7 @@
 
 English | [日本語](./README.ja.md)
 
-[![npm](https://img.shields.io/npm/v/@hiru-ge/asc-mcp)](https://www.npmjs.com/package/@hiru-ge/asc-mcp)
+[![npm](https://img.shields.io/npm/v/@hiruge/asc-mcp)](https://www.npmjs.com/package/@hiruge/asc-mcp)
 [![license](https://img.shields.io/github/license/Hiru-ge/asc-mcp)](./LICENSE)
 
 An unofficial MCP server for the App Store Connect API. Ship iOS apps from a conversation with Claude Code, Cursor, or any MCP client: releases, App Review submission, TestFlight, in-app purchases, and ASO analysis. 73 tools.
@@ -10,7 +10,7 @@ An unofficial MCP server for the App Store Connect API. Ship iOS apps from a con
 ```bash
 claude mcp add app-store-connect \
   -e ASC_KEY_ID=xxx -e ASC_ISSUER_ID=xxx -e ASC_PRIVATE_KEY_PATH=/path/to/AuthKey_xxx.p8 \
-  -- npx -y @hiru-ge/asc-mcp
+  -- npx -y @hiruge/asc-mcp
 ```
 
 Then just ask:
@@ -47,7 +47,7 @@ Subscriptions and webhooks are not supported.
   "mcpServers": {
     "app-store-connect": {
       "command": "npx",
-      "args": ["-y", "@hiru-ge/asc-mcp"],
+      "args": ["-y", "@hiruge/asc-mcp"],
       "env": {
         "ASC_KEY_ID": "xxx",
         "ASC_ISSUER_ID": "xxx",

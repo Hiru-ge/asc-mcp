@@ -1,5 +1,5 @@
 {
-  "name": "@hiru-ge/asc-mcp",
+  "name": "@hiruge/asc-mcp",
   "version": "1.0.0",
   "description": "Unofficial MCP server for the App Store Connect API: releases, App Review, TestFlight, in-app purchases, screenshots, and ASO analysis",
   "type": "module",
