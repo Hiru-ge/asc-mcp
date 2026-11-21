@@ -35,6 +35,7 @@ import { registerTestFlightTools } from "./tools/testflight.js";
 import { registerProductPageTools } from "./tools/product-pages.js";
 import { registerDiagnosticTools } from "./tools/diagnostics.js";
 import { registerInAppPurchaseTools } from "./tools/in-app-purchases.js";
+import { registerNominationTools } from "./tools/nominations.js";
 
 const require = createRequire(import.meta.url);
 const { version } = require("../package.json") as { version: string };
@@ -68,6 +69,7 @@ registerTestFlightTools(server);
 registerProductPageTools(server);
 registerDiagnosticTools(server);
 registerInAppPurchaseTools(server);
+registerNominationTools(server);
 
 async function main(): Promise<void> {
   const transport = new StdioServerTransport();

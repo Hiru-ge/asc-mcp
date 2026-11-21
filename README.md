@@ -5,7 +5,7 @@ English | [日本語](./README.ja.md)
 [![npm](https://img.shields.io/npm/v/@hiruge/asc-mcp)](https://www.npmjs.com/package/@hiruge/asc-mcp)
 [![license](https://img.shields.io/github/license/Hiru-ge/asc-mcp)](./LICENSE)
 
-An unofficial MCP server for the App Store Connect API. Ship iOS apps from a conversation with Claude Code, Cursor, or any MCP client: releases, App Review submission, TestFlight, in-app purchases, and ASO analysis. 73 tools.
+An unofficial MCP server for the App Store Connect API. Ship iOS apps from a conversation with Claude Code, Cursor, or any MCP client: releases, App Review submission, TestFlight, in-app purchases, and ASO analysis. 75 tools.
 
 ```bash
 claude mcp add app-store-connect \
@@ -29,6 +29,7 @@ Apple has no official MCP server for App Store Connect. This one covers the whol
 - Screenshots: create sets, upload local images, delete
 - TestFlight: groups, testers, What to Test, external beta review
 - In-app purchases: consumables and non-consumables, localizations, prices, availability, submission
+- Featuring nominations: list and read nominations by state (read-only)
 - Pricing and availability: price points, schedules, per-territory availability
 - Product pages: Product Page Optimization experiments, custom product pages
 - Reviews: fetch (filter by sort, country, rating) and post developer replies

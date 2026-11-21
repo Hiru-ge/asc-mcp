@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/v/@hiruge/asc-mcp)](https://www.npmjs.com/package/@hiruge/asc-mcp)
 [![license](https://img.shields.io/github/license/Hiru-ge/asc-mcp)](./LICENSE)
 
-App Store Connect API 用の非公式MCPサーバー。Claude CodeなどのMCP対応エージェントから、リリース、審査提出、TestFlight、ASO分析、アプリ内課金まで、自分のアプリの運営を会話で進められる。73ツールを備える。
+App Store Connect API 用の非公式MCPサーバー。Claude CodeなどのMCP対応エージェントから、リリース、審査提出、TestFlight、ASO分析、アプリ内課金まで、自分のアプリの運営を会話で進められる。75ツールを備える。
 
 ```bash
 claude mcp add app-store-connect \
@@ -29,6 +29,7 @@ claude mcp add app-store-connect \
 - スクリーンショット: セット作成、ローカル画像のアップロード、削除
 - TestFlight: グループ、テスター、What to Test、外部テスト審査
 - アプリ内課金: 消耗型・非消耗型の作成、ローカライズ、価格、配信国、審査提出
+- フィーチャーのノミネート: 状態ごとの一覧と1件の取得（読み取りのみ）
 - 価格と配信国: 価格ポイント、価格スケジュール、国別の配信可否
 - プロダクトページ: Product Page Optimization、カスタムプロダクトページ
 - レビュー: 取得（並び順・国・星評価でフィルタ）とデベロッパー返信
